@@ -1,21 +1,32 @@
+-- Use database
+USE nk;
 
+-- View dataset (for understanding structure)
 SELECT * FROM nk.train;
-SELECT Product_Name,sum(Sales) as total_sale FROM nk.train group by Product_Name order by total_sale desc limit 10;
 
-SELECT Category,sum(Sales) as total_sales_by_category FROM nk.train group by Category;
-
-SELECT sum(case when Category="Furniture" then Sales else 0 end)*100/sum(Sales) as furniture_sales_percent FROM nk.train;
-SELECT sum(case when Category="Office Supplies" then Sales else 0 end)*100/sum(Sales) as Office_sales_percent FROM nk.train;
-SELECT sum(case when Category="Technology" then Sales else 0 end)*100/sum(Sales) as Technology_sales_percent FROM nk.train;
-
-SELECT City,sum(Sales) as city_wise_sales FROM nk.train group by City order by city_wise_sales desc limit 10;
-
-SELECT City, Product_Name, SUM(Sales) AS total_sales
-FROM nk.train
-GROUP BY City, Product_Name
-ORDER BY total_sales DESC
+--------------------------------------------------
+-- Top 10 Products by Revenue
+-- Helps identify best-selling products
+SELECT 
+    Product_Name, 
+    SUM(Sales) AS total_sales 
+FROM nk.train 
+GROUP BY Product_Name 
+ORDER BY total_sales DESC 
 LIMIT 10;
 
+--------------------------------------------------
+-- Sales by Category
+-- Shows contribution of each category
+SELECT 
+    Category, 
+    SUM(Sales) AS total_sales_by_category 
+FROM nk.train 
+GROUP BY Category;
+
+--------------------------------------------------
+-- Category-wise Sales Percentage (Optimized)
+-- Shows percentage contribution of each category
 SELECT 
     Category,
     SUM(Sales) AS total_sales,
@@ -23,6 +34,36 @@ SELECT
 FROM nk.train
 GROUP BY Category;
 
+--------------------------------------------------
+-- Top 10 Cities by Sales
+-- Identifies high revenue locations
+SELECT 
+    City,
+    SUM(Sales) AS city_wise_sales 
+FROM nk.train 
+GROUP BY City 
+ORDER BY city_wise_sales DESC 
+LIMIT 10;
 
-SELECT City,sum(Sales) as sales_by_city FROM nk.train group by City order by sales_by_city desc limit 3;
+--------------------------------------------------
+-- Top Product-City Combinations
+-- Shows which product performs best in which city
+SELECT 
+    City, 
+    Product_Name, 
+    SUM(Sales) AS total_sales
+FROM nk.train
+GROUP BY City, Product_Name
+ORDER BY total_sales DESC
+LIMIT 10;
 
+--------------------------------------------------
+-- Top 3 Cities (Final Key Insight)
+-- Major revenue driving cities
+SELECT 
+    City,
+    SUM(Sales) AS sales_by_city 
+FROM nk.train 
+GROUP BY City 
+ORDER BY sales_by_city DESC 
+LIMIT 3;
