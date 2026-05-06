@@ -1,4 +1,4 @@
-use nk;
+
 SELECT * FROM nk.train;
 SELECT Product_Name,sum(Sales) as total_sale FROM nk.train group by Product_Name order by total_sale desc limit 10;
 
